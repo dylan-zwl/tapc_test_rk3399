@@ -12,8 +12,8 @@
         android:layout_centerInParent="true"
         android:progressDrawable="@drawable/seekbar_style_progress"
         android:thumb="@null"
-        app:layout_heightPercent="5%w"
-        app:layout_marginRightPercent="3%h"
+        app:layout_heightPercent="1.8%h"
+        app:layout_marginRightPercent="3%w"
         app:layout_widthPercent="50%w" />
 
     <TextView
@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/progress_message"
-        style="@style/CommonText1"
+        style="@style/CommonText2"
         android:layout_below="@+id/progress"
         android:layout_alignStart="@+id/progress"
         app:layout_marginLeftPercent="1%w"

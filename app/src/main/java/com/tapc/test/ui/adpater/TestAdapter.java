@@ -41,6 +41,9 @@ public class TestAdapter extends BaseRecyclerViewAdapter<TestAdapter.ViewHolder,
     public void onBindViewHolder(final ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         TestItem item = mDatas.get(position);
+        holder.layout.setTag(item);
+        holder.layout.setOnClickListener(this);
+
         String name = item.getName();
         if (name != null) {
             holder.name.setText(name);
@@ -59,8 +62,6 @@ public class TestAdapter extends BaseRecyclerViewAdapter<TestAdapter.ViewHolder,
                 holder.status.setTextColor(mContext.getResources().getColor(R.color.colorFAIL));
                 break;
         }
-        holder.layout.setTag(item);
-        holder.layout.setOnClickListener(this);
     }
 
 

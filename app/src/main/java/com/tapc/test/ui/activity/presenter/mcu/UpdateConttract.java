@@ -1,4 +1,4 @@
-package com.tapc.test.model.mcu;
+package com.tapc.test.ui.activity.presenter.mcu;
 
 /**
  * Created by Administrator on 2017/3/17.

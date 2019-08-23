@@ -1,0 +1,39 @@
+<com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <SeekBar
+        android:id="@+id/brightness_seekbar"
+        android:layout_width="800px"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:max="255"
+        android:progressDrawable="@drawable/seekbar_style_progress"
+        android:thumb="@null"
+        app:layout_widthPercent="50%w" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/brightness_seekbar"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        app:layout_marginTopPercent="20%h">
+
+        <Button
+            android:id="@+id/bright_test_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重测一次" />
+
+        <Button
+            android:id="@+id/bright_test_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:text="测试完成" />
+    </LinearLayout>
+
+</com.zhy.android.percent.support.PercentRelativeLayout>

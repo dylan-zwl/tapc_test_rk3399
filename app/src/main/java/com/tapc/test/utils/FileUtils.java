@@ -17,7 +17,7 @@ import java.util.zip.ZipInputStream;
  * Created by Administrator on 2017/4/6.
  */
 
-public class FileUtil {
+public class FileUtils {
 
     //获取文件夹大小
     public static long getFileSize(File file) throws Exception {

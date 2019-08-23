@@ -12,8 +12,8 @@ import android.view.WindowManager;
 
 import com.tapc.test.R;
 import com.tapc.test.application.Config;
-import com.tapc.test.model.mcu.McuPresenter;
-import com.tapc.test.model.mcu.UpdateConttract;
+import com.tapc.test.ui.activity.presenter.mcu.McuPresenter;
+import com.tapc.test.ui.activity.presenter.mcu.UpdateConttract;
 import com.tapc.test.ui.base.BaseSystemView;
 import com.tapc.test.utils.WindowManagerUtils;
 

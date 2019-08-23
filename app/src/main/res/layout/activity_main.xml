@@ -64,7 +64,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="420"
                 android:background="@drawable/bg_test_item"
-                android:clickable="true"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:paddingBottom="28dp">
@@ -78,11 +77,15 @@
                 android:background="@drawable/bg_test"
                 app:layout_marginLeftPercent="1.8%w">
 
-                <TextView
-                    android:id="@+id/test_infor"
-                    style="@style/CommonText3"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/test_msg_recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="28dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
             </com.zhy.android.percent.support.PercentLinearLayout>
         </com.zhy.android.percent.support.PercentLinearLayout>
     </com.zhy.android.percent.support.PercentLinearLayout>

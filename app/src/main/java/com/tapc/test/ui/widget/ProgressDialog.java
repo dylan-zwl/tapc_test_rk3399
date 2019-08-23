@@ -1,17 +1,14 @@
 package com.tapc.test.ui.widget;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.ThemedSpinnerAdapter;
 
 import com.tapc.test.R;
 import com.tapc.test.ui.base.BaseSystemView;
-import com.tapc.test.ui.event.ProgressDialogEvent;
 import com.tapc.test.utils.WindowManagerUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,18 +68,5 @@ public class ProgressDialog extends BaseSystemView {
             message = "";
         }
         mMessage.setText(message);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void update(ProgressDialogEvent event) {
-        if (event.getVisibility() == View.VISIBLE) {
-            setProgress(event.getProgress());
-            setMessage(event.getMessage());
-            show();
-        } else {
-            setProgress(0);
-            setMessage(null);
-            hide();
-        }
     }
 }

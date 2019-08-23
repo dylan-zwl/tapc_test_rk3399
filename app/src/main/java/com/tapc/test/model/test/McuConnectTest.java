@@ -2,7 +2,9 @@ package com.tapc.test.model.test;
 
 import android.app.Activity;
 import android.os.SystemClock;
+import android.text.TextUtils;
 
+import com.tapc.platform.model.device.controller.MachineController;
 import com.tapc.platform.model.device.controller.uart.Commands;
 import com.tapc.test.model.base.BaseTest;
 import com.tapc.test.ui.entity.MessageType;
@@ -11,12 +13,9 @@ import com.tapc.test.ui.entity.TestSatus;
 
 import io.reactivex.ObservableEmitter;
 
-public class USBTest extends BaseTest {
+public class McuConnectTest extends BaseTest {
 
-    private int mReceiveCommandCount = 0;
-    private int mMaxTestNumber = 10;
-
-    public USBTest(Activity activity, TestItem item) {
+    public McuConnectTest(Activity activity, TestItem item) {
         super(activity, item);
     }
 
@@ -27,25 +26,21 @@ public class USBTest extends BaseTest {
 
     @Override
     public void testProcess(ObservableEmitter<Object> emitter) {
-        mReceiveCommandCount = 0;
-        for (int i = 0; i < mMaxTestNumber; i++) {
-            uartCtl.sendStartTestCommand(commands, 0, 0);
-            SystemClock.sleep(100);
-        }
-
-        if (mReceiveCommandCount >= (mMaxTestNumber - 2)) {
+        MachineController.getInstance().sendCtlVersionCmd(null);
+        SystemClock.sleep(500);
+        String recvMcuVersion = MachineController.getInstance().getCtlVersionValue();
+        if (!TextUtils.isEmpty(recvMcuVersion)) {
             testItem.setStatus(TestSatus.OK);
         } else {
             testItem.setStatus(TestSatus.FAIL);
-            testCallback.handleMessage(MessageType.SHOW_MSG_ERROR, "与测试架通讯失败，请查看线是否联通或测试架是否烧录程序！" +
+            testCallback.handleMessage(MessageType.SHOW_MSG_ERROR, "与主板MCU通讯失败，请查看否烧录程序！" +
                     "\n请先查看好此问题才能继续测试！");
         }
-        stop();
     }
 
     @Override
     protected void receiveCommands(int testResult) {
         super.receiveCommands(testResult);
-        mReceiveCommandCount++;
+
     }
 }

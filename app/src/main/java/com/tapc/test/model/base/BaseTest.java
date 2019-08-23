@@ -33,6 +33,10 @@ public abstract class BaseTest implements ITest {
         this.activity = activity;
         this.testItem = item;
         this.commands = getCommand();
+        init();
+    }
+
+    protected void init() {
     }
 
     public abstract Commands getCommand();

@@ -1,11 +1,11 @@
-package com.tapc.test.model.mcu;
+package com.tapc.test.ui.activity.presenter.mcu;
 
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.tapc.platform.model.device.controller.IOUpdateController;
 import com.tapc.platform.model.device.controller.MachineController;
-import com.tapc.test.utils.FileUtil;
+import com.tapc.test.utils.FileUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -28,7 +28,7 @@ public class McuPresenter implements UpdateConttract.UpdatePresenter {
 
     @Override
     public void update(String filePath) {
-        String mcuFileName = FileUtil.getFilename(filePath, new FilenameFilter() {
+        String mcuFileName = FileUtils.getFilename(filePath, new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 name = name.toLowerCase();
