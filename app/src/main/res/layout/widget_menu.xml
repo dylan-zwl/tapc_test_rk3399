@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom"
+    android:gravity="center_horizontal|bottom"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_heightPercent="10%w"
+        app:layout_marginBottomPercent="1.4%w"
+        app:layout_widthPercent="8%w">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_start" />
+
+        <TextView
+            style="@style/CommonText2"
+            android:layout_marginTop="5dp"
+            android:text="开始/重测" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_heightPercent="10%w"
+        app:layout_marginBottomPercent="1.4%w"
+        app:layout_marginLeftPercent="1.8%w"
+        app:layout_widthPercent="8%w">
+
+        <Button
+            android:id="@+id/menu_update_mcu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_update_mcu" />
+
+        <TextView
+            style="@style/CommonText2"
+            android:layout_marginTop="5dp"
+            android:text="烧录MCU" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_heightPercent="10%w"
+        app:layout_marginBottomPercent="1.4%w"
+        app:layout_marginLeftPercent="1.8%w"
+        app:layout_widthPercent="8%w">
+
+        <Button
+            android:id="@+id/menu_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_setting" />
+
+        <TextView
+            style="@style/CommonText2"
+            android:layout_marginTop="5dp"
+            android:text="系统设置" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_heightPercent="10%w"
+        app:layout_marginBottomPercent="1.4%w"
+        app:layout_marginLeftPercent="1.8%w"
+        app:layout_widthPercent="8%w">
+
+        <Button
+            android:id="@+id/menu_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_exit" />
+
+        <TextView
+            style="@style/CommonText2"
+            android:layout_marginTop="5dp"
+            android:text="关闭软件" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_heightPercent="10%w"
+        app:layout_marginBottomPercent="1.4%w"
+        app:layout_marginLeftPercent="1.8%w"
+        app:layout_widthPercent="8%w">
+
+        <Button
+            android:id="@+id/menu_uninstall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_uninstall" />
+
+        <TextView
+            style="@style/CommonText2"
+            android:layout_marginTop="5dp"
+            android:text="卸载软件" />
+    </LinearLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>
