@@ -4,28 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#cc000000"
-    android:gravity="center_horizontal">
+    android:gravity="center">
 
     <TextView
         android:id="@+id/test_result_title"
-        style="@style/CommonText1"
+        style="@style/CommonText2"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_test_result_title"
         android:text="测试"
-        app:layout_marginTopPercent="20%h" />
+        app:layout_heightPercent="14%h"
+        app:layout_widthPercent="24%w" />
 
     <Button
         android:id="@+id/test_result_success"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/CommonText2"
+        android:layout_below="@id/test_result_title"
+        android:layout_alignStart="@id/test_result_title"
         android:layout_centerVertical="true"
-        android:text="成功" />
+        android:background="@drawable/btn_common"
+        android:text="成功"
+        app:layout_heightPercent="5.5%h"
+        app:layout_marginTopPercent="4%h"
+        app:layout_widthPercent="11%w" />
 
     <Button
         android:id="@+id/test_result_fail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/CommonText2"
+        android:layout_below="@id/test_result_title"
+        android:layout_alignEnd="@id/test_result_title"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/test_result_success"
+        android:background="@drawable/btn_common"
         android:text="失败"
-        app:layout_marginLeftPercent="20%w" />
+        app:layout_heightPercent="5.5%h"
+        app:layout_marginTopPercent="4%h"
+        app:layout_widthPercent="11%w" />
+
 </com.zhy.android.percent.support.PercentRelativeLayout>

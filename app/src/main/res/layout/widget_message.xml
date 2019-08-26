@@ -3,13 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#cc000000"
-    android:gravity="center">
+    android:background="#cc000000">
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_heightPercent="12.5%w"
@@ -31,4 +30,16 @@
             android:text="测试软件"
             app:layout_marginTopPercent="3%h" />
     </com.zhy.android.percent.support.PercentLinearLayout>
+
+    <Button
+        android:id="@+id/stop_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/btn_stop"
+        app:layout_heightPercent="6%w"
+        app:layout_marginEndPercent="3%w"
+        app:layout_marginTopPercent="3%w"
+        app:layout_widthPercent="6%w" />
 </com.zhy.android.percent.support.PercentRelativeLayout>

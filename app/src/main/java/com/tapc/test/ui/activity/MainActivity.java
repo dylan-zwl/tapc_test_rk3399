@@ -1,11 +1,9 @@
 package com.tapc.test.ui.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,12 +11,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tapc.platform.jni.Driver;
 import com.tapc.platform.model.device.controller.MachineController;
-import com.tapc.platform.model.device.controller.uart.UARTController;
 import com.tapc.test.R;
-import com.tapc.test.application.Config;
 import com.tapc.test.model.base.ITestCallback;
+import com.tapc.test.model.test.ManualTest;
 import com.tapc.test.model.test.CopyFileTest;
 import com.tapc.test.model.test.USBTest;
 import com.tapc.test.ui.activity.presenter.mcu.TestMessagePresenter;
@@ -29,7 +25,6 @@ import com.tapc.test.ui.entity.TestItem;
 import com.tapc.test.ui.entity.TestMessageItem;
 import com.tapc.test.ui.widget.MenuBar;
 import com.tapc.test.ui.widget.MessageDialog;
-import com.tapc.test.ui.widget.ProgressDialog;
 import com.tapc.test.utils.SysUtils;
 
 import java.util.ArrayList;
@@ -96,12 +91,16 @@ public class MainActivity extends Activity implements ITestCallback {
         mMessagePresenter = new TestMessagePresenter(this, mMessageRecyclerView);
 
         mTestList = new ArrayList<>();
-//        for (TestItem item : TestItem.values()) {
-//            mTestList.add(item);
-//        }
-        mTestList.add(TestItem.USB);
-        mTestList.add(TestItem.TF);
-        mTestList.add(TestItem.UDISK);
+        for (TestItem item : TestItem.values()) {
+            mTestList.add(item);
+        }
+//        mTestList.add(TestItem.USB);
+//        mTestList.add(TestItem.TF);
+//        mTestList.add(TestItem.UDISK);
+//
+//        mTestList.add(TestItem.BACKLIGHT);
+//        mTestList.add(TestItem.TFT_COLOR);
+//        mTestList.add(TestItem.TOUCHSCREEN);
 
         mAdapter = new TestAdapter(mTestList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3,
@@ -122,10 +121,20 @@ public class MainActivity extends Activity implements ITestCallback {
                         CopyFileTest tfTest = new CopyFileTest(mActivity, testItem);
                         tfTest.setTestCallback(MainActivity.this);
                         tfTest.start();
+                        break;
                     case UDISK:
                         CopyFileTest udiskTest = new CopyFileTest(mActivity, testItem);
                         udiskTest.setTestCallback(MainActivity.this);
                         udiskTest.start();
+                        break;
+                    case TFT_COLOR:
+                    case TOUCHSCREEN:
+                    case BACKLIGHT:
+                        ManualTest manualTest = new ManualTest(mActivity, testItem);
+                        manualTest.setTestCallback(MainActivity.this);
+                        manualTest.setMenuBar(mMenuBar);
+                        manualTest.start();
+                        break;
                 }
             }
         });

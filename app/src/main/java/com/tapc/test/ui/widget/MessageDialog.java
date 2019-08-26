@@ -13,6 +13,7 @@ import com.tapc.test.utils.WindowManagerUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 public class MessageDialog extends BaseSystemView {
@@ -45,5 +46,8 @@ public class MessageDialog extends BaseSystemView {
         mMessage.setText(text);
     }
 
-
+    @OnClick(R.id.stop_test)
+    protected void stopTest() {
+        System.exit(0);
+    }
 }

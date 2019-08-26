@@ -48,13 +48,18 @@ public class TestResultDialog extends BaseSystemView {
 
     @OnClick(R.id.test_result_success)
     protected void successOnClick() {
-        mTestItem.setStatus(TestSatus.OK);
-        EventBus.getDefault().post(mTestItem);
+        setResult(TestSatus.OK);
     }
 
-    @OnClick(R.id.test_result_success)
+    @OnClick(R.id.test_result_fail)
     protected void failOnClick() {
-        mTestItem.setStatus(TestSatus.FAIL);
-        EventBus.getDefault().post(mTestItem);
+        setResult(TestSatus.FAIL);
     }
+
+    private void setResult(int status) {
+        mTestItem.setStatus(status);
+        EventBus.getDefault().post(mTestItem);
+        dismiss();
+    }
+
 }

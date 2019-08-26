@@ -28,6 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.BrightnessTestActivity" />
+        <activity android:name=".ui.activity.TouchTestActivity" />
+        <activity android:name=".ui.activity.TftTestActivity" />
     </application>
 
 </manifest>

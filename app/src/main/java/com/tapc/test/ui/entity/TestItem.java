@@ -23,7 +23,7 @@ public enum TestItem {
     UDISK("U盘测试"),
     LED("LED测试"),
     BAT("电池测试"),
-    BRIGHT("背光测试"),
+    BACKLIGHT("背光测试"),
     RFID("RF测试");
 
     private String name = "";

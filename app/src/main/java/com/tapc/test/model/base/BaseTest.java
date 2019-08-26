@@ -29,6 +29,8 @@ public abstract class BaseTest implements ITest {
     protected Disposable disposable;
     protected ITestCallback testCallback;
 
+    private boolean isShowProgressDialog = true;
+
     public BaseTest(Activity activity, TestItem item) {
         this.activity = activity;
         this.testItem = item;
@@ -47,7 +49,7 @@ public abstract class BaseTest implements ITest {
         if (commands != null) {
             uartCtl.subscribeDataReceivedNotification(this);
         }
-        if (testCallback != null && testItem != null) {
+        if (isShowProgressDialog && testCallback != null && testItem != null) {
             testCallback.handleMessage(MessageType.SHOW_TEST_PROGRESS, testItem.getName());
         }
     }
@@ -114,5 +116,9 @@ public abstract class BaseTest implements ITest {
 
     public void setTestCallback(ITestCallback testCallback) {
         this.testCallback = testCallback;
+    }
+
+    protected void setProgressDialogVisibility(boolean isShowProgressDialog) {
+        this.isShowProgressDialog = isShowProgressDialog;
     }
 }

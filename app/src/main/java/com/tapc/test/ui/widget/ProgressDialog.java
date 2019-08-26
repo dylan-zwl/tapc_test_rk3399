@@ -44,7 +44,6 @@ public class ProgressDialog extends BaseSystemView {
     @Override
     protected void initView() {
         super.initView();
-        EventBus.getDefault().register(this);
         mProgress.setProgress(0);
         this.setOnClickListener(new OnClickListener() {
             @Override

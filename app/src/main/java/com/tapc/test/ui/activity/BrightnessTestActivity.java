@@ -13,6 +13,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.tapc.test.R;
+import com.tapc.test.ui.base.BaseActivity;
+import com.tapc.test.ui.event.BrightnessResultEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -20,19 +22,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BrightnessTestActivity extends Activity {
+public class BrightnessTestActivity extends BaseActivity {
     @BindView(R.id.brightness_seekbar)
     SeekBar mBrightnessBar;
 
     private Handler mHandler;
     private int index;
 
+    @Override
+    protected int getLayoutResID() {
+        return R.layout.activity_brightness;
+    }
+
     @SuppressLint("HandlerLeak")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_brightness);
-        ButterKnife.bind(this);
+    protected void initView() {
+        super.initView();
+
         mBrightnessBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             @Override
@@ -73,7 +79,7 @@ public class BrightnessTestActivity extends Activity {
                 }
 
                 if (index < 4) {
-                    mHandler.sendEmptyMessageDelayed(0, 700);
+                    mHandler.sendEmptyMessageDelayed(0, 1000);
                 } else {
                     index = 0;
                     // testFinish(null);
@@ -87,6 +93,7 @@ public class BrightnessTestActivity extends Activity {
         mHandler.sendEmptyMessageDelayed(0, 0);
     }
 
+
     private void setBrightness(Activity activity, int brightness) {
         WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
         lp.screenBrightness = Float.valueOf(brightness) * (1f / 255f);
@@ -96,9 +103,7 @@ public class BrightnessTestActivity extends Activity {
 
     @OnClick(R.id.bright_test_finish)
     protected void testFinish(View v) {
-        Intent intent = new Intent();
-        this.setResult(1, intent);
-        EventBus.getDefault().post(new BrightnessTestActivity());
+        EventBus.getDefault().post(new BrightnessResultEvent());
         this.finish();
     }
 
