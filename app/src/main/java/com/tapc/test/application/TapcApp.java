@@ -32,6 +32,8 @@ public class TapcApp extends Application {
         }
         UARTController.DEVICE_NAME = deviceName;
         Driver.initCom(deviceName, 115200);
+        Driver.initCom("/dev/ttyXRUSB0", 115200);
+        Driver.initCom("/dev/ttyXRUSB1", 115200);
 
         MachineController controller = MachineController.getInstance();
         controller.initController(this);

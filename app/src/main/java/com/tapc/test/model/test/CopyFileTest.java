@@ -45,9 +45,6 @@ public class CopyFileTest extends BaseTest {
         } else {
             testItem.setStatus(TestSatus.FAIL);
         }
-        if (!result && mFilePath.equals(Config.UDISK_FILE_PATH)) {
-            //testCallback.handleMessage(MessageType.SHOW_MSG_ERROR, "USB测试失败");
-        }
         stop();
     }
 

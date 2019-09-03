@@ -30,10 +30,10 @@ public class USBTest extends BaseTest {
         mReceiveCommandCount = 0;
         for (int i = 0; i < mMaxTestNumber; i++) {
             uartCtl.sendStartTestCommand(commands, 0, 0);
-            SystemClock.sleep(100);
+            SystemClock.sleep(50);
         }
 
-        if (mReceiveCommandCount >= (mMaxTestNumber - 2)) {
+        if (mReceiveCommandCount == mMaxTestNumber) {
             testItem.setStatus(TestSatus.OK);
         } else {
             testItem.setStatus(TestSatus.FAIL);

@@ -10,12 +10,17 @@ import android.view.View;
 import android.view.WindowManager;
 
 
+import com.tapc.platform.jni.Driver;
 import com.tapc.test.R;
 import com.tapc.test.application.Config;
 import com.tapc.test.ui.activity.presenter.mcu.McuPresenter;
 import com.tapc.test.ui.activity.presenter.mcu.UpdateConttract;
 import com.tapc.test.ui.base.BaseSystemView;
+import com.tapc.test.ui.event.GetMcuVersionEvent;
+import com.tapc.test.ui.event.StartTestEvent;
 import com.tapc.test.utils.WindowManagerUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.OnClick;
 
@@ -70,7 +75,8 @@ public class MenuBar extends BaseSystemView {
         }).start();
     }
 
-    private void showProgressDialog(final int visibility, final int progress, final String message) {
+    private void showProgressDialog(final int visibility, final int progress,
+                                    final String message) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -100,5 +106,15 @@ public class MenuBar extends BaseSystemView {
         Intent intent = new Intent(Intent.ACTION_DELETE);
         intent.setData(Uri.parse("package:" + mContext.getPackageName()));
         mContext.startActivity(intent);
+    }
+
+    @OnClick(R.id.menu_start)
+    protected void startTest() {
+        EventBus.getDefault().post(new StartTestEvent());
+    }
+
+    @OnClick(R.id.menu_back)
+    protected void back() {
+        Driver.back();
     }
 }

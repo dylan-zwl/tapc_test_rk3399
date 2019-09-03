@@ -28,9 +28,9 @@ public class SafeKeyTest extends BaseTest {
     @Override
     public void testProcess(ObservableEmitter<Object> emitter) {
         int status = testSafekey(LOCK_STATUS);
-        if ((status & HardwareStatusController.SAFEKEY_MASK_VALUE) == HardwareStatusController.SAFEKEY_MASK_VALUE) {
+        if (status == HardwareStatusController.SAFEKEY_MASK_VALUE) {
             status = testSafekey(UNLOCK_STATUS);
-            if ((status & HardwareStatusController.SAFEKEY_MASK_VALUE) == 0) {
+            if (status == 0) {
                 testItem.setStatus(TestSatus.OK);
             } else {
                 testItem.setStatus(TestSatus.FAIL);

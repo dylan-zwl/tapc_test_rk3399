@@ -78,4 +78,19 @@ public class TestAdapter extends BaseRecyclerViewAdapter<TestAdapter.ViewHolder,
             ButterKnife.bind(this, view);
         }
     }
+
+//    public interface TestProgress {
+//        void finish();
+//    }
+//
+//    private TestProgress mTestProgress;
+//
+//    public TestProgress getTestProgress() {
+//        return mTestProgress;
+//    }
+//
+//    public void setTestProgress(TestProgress testProgress) {
+//        this.mTestProgress = testProgress;
+//    }
+
 }

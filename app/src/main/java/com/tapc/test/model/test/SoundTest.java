@@ -14,6 +14,7 @@ import com.tapc.test.application.VoiceInputService;
 import com.tapc.test.model.base.BaseTest;
 import com.tapc.test.model.usb.RecvTestResult;
 import com.tapc.test.model.usb.TestUMcuCmd;
+import com.tapc.test.ui.entity.MessageType;
 import com.tapc.test.ui.entity.TestItem;
 import com.tapc.test.ui.entity.TestSatus;
 import com.tapc.test.ui.entity.TestVolumeStatus;
@@ -84,8 +85,7 @@ public class SoundTest extends BaseTest {
         } else {
             setVolume(TEST_VOLUME_MUTE, TestWay.LEFT_RIGHT);
         }
-
-        while (testItem.getStatus() == TestSatus.NG) {
+        while (testItem.getStatus() == TestSatus.IN_TESTING) {
             SystemClock.sleep(200);
         }
 
@@ -164,11 +164,15 @@ public class SoundTest extends BaseTest {
         boolean result = false;
         String msgStr = "电压值信息\n";
 
-        int leftVolume1L = (int) ((mTestResultData[9] & 0xFF) | ((mTestResultData[10] & 0xFF) << 8));
-        int rightVolume1L = (int) ((mTestResultData[5] & 0xFF) | ((mTestResultData[6] & 0xFF) << 8));
+        int leftVolume1L =
+                (int) ((mTestResultData[9] & 0xFF) | ((mTestResultData[10] & 0xFF) << 8));
+        int rightVolume1L =
+                (int) ((mTestResultData[5] & 0xFF) | ((mTestResultData[6] & 0xFF) << 8));
 
-        int leftVolume1H = (int) ((mTestResultData[11] & 0xFF) | ((mTestResultData[12] & 0xFF) << 8));
-        int rightVolume1H = (int) ((mTestResultData[7] & 0xFF) | ((mTestResultData[8] & 0xFF) << 8));
+        int leftVolume1H =
+                (int) ((mTestResultData[11] & 0xFF) | ((mTestResultData[12] & 0xFF) << 8));
+        int rightVolume1H =
+                (int) ((mTestResultData[7] & 0xFF) | ((mTestResultData[8] & 0xFF) << 8));
 
         msgStr = msgStr + "通道1左声道：（" + leftVolume1L + "~" + leftVolume1H + "）mv\n";
         msgStr = msgStr + "通道1右声道：（" + rightVolume1L + "~" + rightVolume1H + "）mv\n";
@@ -179,11 +183,15 @@ public class SoundTest extends BaseTest {
         }
 
         if (isSpeakerOutput) {
-            int leftVolume2L = (int) ((mTestResultData[17] & 0xFF) | ((mTestResultData[18] & 0xFF) << 8));
-            int rightVolume2L = (int) ((mTestResultData[13] & 0xFF) | ((mTestResultData[14] & 0xFF) << 8));
+            int leftVolume2L =
+                    (int) ((mTestResultData[17] & 0xFF) | ((mTestResultData[18] & 0xFF) << 8));
+            int rightVolume2L =
+                    (int) ((mTestResultData[13] & 0xFF) | ((mTestResultData[14] & 0xFF) << 8));
 
-            int leftVolume2H = (int) ((mTestResultData[19] & 0xFF) | ((mTestResultData[20] & 0xFF) << 8));
-            int rightVolume2H = (int) ((mTestResultData[15] & 0xFF) | ((mTestResultData[16] & 0xFF) << 8));
+            int leftVolume2H =
+                    (int) ((mTestResultData[19] & 0xFF) | ((mTestResultData[20] & 0xFF) << 8));
+            int rightVolume2H =
+                    (int) ((mTestResultData[15] & 0xFF) | ((mTestResultData[16] & 0xFF) << 8));
 
             msgStr = msgStr + "通道2左声道：（" + leftVolume2L + "~" + leftVolume2H + "）mv\n";
             msgStr = msgStr + "通道2右声道：（" + rightVolume2L + "~" + rightVolume2H + "）mv\n";
@@ -199,9 +207,12 @@ public class SoundTest extends BaseTest {
         }
         if (result) {
             testItem.setStatus(TestSatus.OK);
+            testCallback.handleMessage(MessageType.SHOW_MSG_NOMAL,
+                    testItem.getName() + "测试信息:" + msgStr);
         } else {
             testItem.setStatus(TestSatus.FAIL);
-            stop();
+            testCallback.handleMessage(MessageType.SHOW_MSG_ERROR,
+                    testItem.getName() + "测试失败:" + msgStr);
         }
         return result;
     }
@@ -250,7 +261,8 @@ public class SoundTest extends BaseTest {
                 volume = mSetVolumeH;
                 break;
         }
-        mAudiomanage.setStreamVolume(AudioManager.STREAM_MUSIC, volume, AudioManager.FLAG_PLAY_SOUND);
+        mAudiomanage.setStreamVolume(AudioManager.STREAM_MUSIC, volume,
+                AudioManager.FLAG_PLAY_SOUND);
         sendStartTestCommand(level, flag);
         Log.e("audio", " volume : " + volume + " level :" + level);
     }

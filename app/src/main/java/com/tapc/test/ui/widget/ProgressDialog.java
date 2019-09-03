@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.tapc.test.R;
 import com.tapc.test.ui.base.BaseSystemView;
+import com.tapc.test.ui.event.GetMcuVersionEvent;
 import com.tapc.test.utils.WindowManagerUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,6 +50,9 @@ public class ProgressDialog extends BaseSystemView {
             @Override
             public void onClick(View v) {
                 hide();
+                if (mProgress.getProgress() == 100) {
+                    EventBus.getDefault().post(new GetMcuVersionEvent());
+                }
             }
         });
     }

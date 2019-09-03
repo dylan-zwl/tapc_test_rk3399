@@ -8,6 +8,7 @@ import com.tapc.platform.model.device.controller.uart.ReceivePacket;
 import com.tapc.test.model.usb.UartCtl;
 import com.tapc.test.ui.entity.MessageType;
 import com.tapc.test.ui.entity.TestItem;
+import com.tapc.test.ui.entity.TestSatus;
 import com.tapc.test.utils.RxjavaUtils;
 
 import java.util.Observable;
@@ -45,13 +46,15 @@ public abstract class BaseTest implements ITest {
 
     @Override
     public void start() {
-        creatDisposable();
         if (commands != null) {
             uartCtl.subscribeDataReceivedNotification(this);
         }
         if (isShowProgressDialog && testCallback != null && testItem != null) {
             testCallback.handleMessage(MessageType.SHOW_TEST_PROGRESS, testItem.getName());
         }
+        testItem.setStatus(TestSatus.IN_TESTING);
+        testItem.setTestFinished(false);
+        creatDisposable();
     }
 
     @Override
@@ -65,6 +68,7 @@ public abstract class BaseTest implements ITest {
             testCallback.setTestResult(testItem);
             testCallback.handleMessage(MessageType.HIDE_TEST_PROGRESS, "");
         }
+        testItem.setTestFinished(true);
     }
 
     protected void receiveCommands(int testResult) {
@@ -105,6 +109,7 @@ public abstract class BaseTest implements ITest {
             @Override
             public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
                 testProcess(emitter);
+                stop();
             }
         }, new Consumer() {
             @Override

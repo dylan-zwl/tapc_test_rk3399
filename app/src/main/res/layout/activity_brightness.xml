@@ -24,15 +24,19 @@
 
         <Button
             android:id="@+id/bright_test_again"
+            style="@style/CommonText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/btn_common"
             android:text="重测一次" />
 
         <Button
             android:id="@+id/bright_test_finish"
+            style="@style/CommonText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
+            android:background="@drawable/btn_common"
             android:text="测试完成" />
     </LinearLayout>
 

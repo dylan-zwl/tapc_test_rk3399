@@ -46,7 +46,6 @@ public class ManualTest extends BaseTest {
         emitter.onNext(HIDE_MENU_BAR);
         SystemClock.sleep(500);
         EventBus.getDefault().register(this);
-        testItem.setStatus(TestSatus.NG);
         switch (testItem) {
             case BACKLIGHT:
                 IntentUtil.startActivity(activity, BrightnessTestActivity.class);
@@ -61,7 +60,7 @@ public class ManualTest extends BaseTest {
                 testItem.setStatus(TestSatus.FAIL);
                 break;
         }
-        while (testItem.getStatus() == TestSatus.NG) {
+        while (testItem.getStatus() == TestSatus.IN_TESTING) {
             SystemClock.sleep(200);
         }
         stop();

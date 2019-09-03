@@ -21,13 +21,13 @@ public class McuConnectTest extends BaseTest {
 
     @Override
     public Commands getCommand() {
-        return Commands.REGISTER_WHT_AGING;
+        return null;
     }
 
     @Override
     public void testProcess(ObservableEmitter<Object> emitter) {
         MachineController.getInstance().sendCtlVersionCmd(null);
-        SystemClock.sleep(500);
+        SystemClock.sleep(200);
         String recvMcuVersion = MachineController.getInstance().getCtlVersionValue();
         if (!TextUtils.isEmpty(recvMcuVersion)) {
             testItem.setStatus(TestSatus.OK);

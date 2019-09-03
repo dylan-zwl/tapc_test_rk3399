@@ -1,14 +1,25 @@
 package com.tapc.test.model.usb;
 
 
+import android.os.SystemClock;
+
 import com.tapc.platform.model.device.controller.uart.Commands;
 import com.tapc.platform.model.device.controller.uart.CommunicationPacket;
 import com.tapc.platform.model.device.controller.uart.ReceiveDataHandler;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Observer;
 
 public class UartCtl {
     private static UartCtl sUartCtl;
+    private static final String DEVICE_NAME = "/dev/ttyXRUSB0";
+
+    private boolean isOpened = false;
+    private FileInputStream mFileInputStream;
+    private FileOutputStream mFileOutputStream;
 
     public static UartCtl getInstance() {
         if (sUartCtl == null) {
@@ -18,36 +29,67 @@ public class UartCtl {
     }
 
     private UartCtl() {
-
+        isOpened = open();
+        if (isOpened) {
+            ReadThread readThread = new ReadThread();
+            readThread.start();
+        }
     }
 
     public boolean open() {
+        try {
+            mFileInputStream = new FileInputStream(DEVICE_NAME);
+            mFileOutputStream = new FileOutputStream(DEVICE_NAME);
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     public void close() {
-
+        isOpened = false;
+        if (mFileInputStream != null) {
+            try {
+                mFileInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (mFileOutputStream != null) {
+            try {
+                mFileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public boolean isConnected() {
-        return false;
+        return isOpened;
     }
 
+    //发送命令
     public boolean sendCommand(Commands commands, byte[] data) {
         CommunicationPacket com = new CommunicationPacket(commands);
         com.setData(data);
         byte[] sendDate = com.getPacketByteArray();
-        sendData(sendDate.length, sendDate);
-        return true;
+        try {
+            if (mFileOutputStream != null) {
+                mFileOutputStream.write(sendDate);
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    private void sendData(int length, byte[] sendDate) {
-
-    }
-
+    //接收命令
     ReceiveDataHandler mReceiveDataHandler;
 
     class ReadThread extends Thread {
+
         ReadThread() {
             this.setPriority(MAX_PRIORITY);
             if (mReceiveDataHandler == null) {
@@ -56,18 +98,18 @@ public class UartCtl {
         }
 
         public void run() {
-            int readcount = 0;
-//            while (true && isUsbConnect()) {
-//                readcount = ftDev.getQueueStatus();
-//                if (readcount > 0) {
-//                    byte[] usbdata = new byte[readcount];
-//                    ftDev.read(usbdata, readcount);
-//                    for (int i = 0; i < readcount; i++) {
-//                        mReceiveDataHandler.handleReceivedByte(usbdata[i]);
-//                    }
-//                }
-//                SystemClock.sleep(20);
-//            }
+            if (mFileInputStream != null) {
+                byte[] dataArray = new byte[1];
+                while (isConnected()) {
+                    try {
+                        if (mFileInputStream.read(dataArray, 0, 1) != 0) {
+                            mReceiveDataHandler.handleReceivedByte(dataArray[0]);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 

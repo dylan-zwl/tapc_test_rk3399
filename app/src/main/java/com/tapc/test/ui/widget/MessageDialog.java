@@ -50,4 +50,10 @@ public class MessageDialog extends BaseSystemView {
     protected void stopTest() {
         System.exit(0);
     }
+
+    @Override
+    public void hide() {
+        mMessage.setText("");
+        super.hide();
+    }
 }
