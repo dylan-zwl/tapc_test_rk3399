@@ -65,13 +65,20 @@ public abstract class BaseTest implements ITest {
         }
 
         if (testCallback != null && testItem != null) {
+            if (testItem.getStatus() == TestSatus.IN_TESTING) {
+                testItem.setStatus(TestSatus.FAIL);
+            }
             testCallback.setTestResult(testItem);
             testCallback.handleMessage(MessageType.HIDE_TEST_PROGRESS, "");
+            testItem.setTestFinished(true);
         }
-        testItem.setTestFinished(true);
     }
 
     protected void receiveCommands(int testResult) {
+
+    }
+
+    protected void receiveCommands(int testResult, byte[] resultData) {
 
     }
 

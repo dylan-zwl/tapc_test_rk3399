@@ -1,7 +1,6 @@
 package com.tapc.test.ui.activity;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,15 +24,13 @@ import com.tapc.test.model.test.SafeKeyTest;
 import com.tapc.test.model.test.SoundTest;
 import com.tapc.test.model.test.USBTest;
 import com.tapc.test.model.test.UartTest;
-import com.tapc.test.ui.activity.presenter.mcu.TestMessagePresenter;
+import com.tapc.test.ui.activity.presenter.TestMessagePresenter;
 import com.tapc.test.ui.adpater.TestAdapter;
 import com.tapc.test.ui.base.BaseActivity;
 import com.tapc.test.ui.base.BaseRecyclerViewAdapter;
 import com.tapc.test.ui.entity.MessageType;
 import com.tapc.test.ui.entity.TestItem;
 import com.tapc.test.ui.entity.TestMessageItem;
-import com.tapc.test.ui.entity.TestSatus;
-import com.tapc.test.ui.event.BrightnessResultEvent;
 import com.tapc.test.ui.event.GetMcuVersionEvent;
 import com.tapc.test.ui.event.StartTestEvent;
 import com.tapc.test.ui.widget.MenuBar;
@@ -117,7 +114,8 @@ public class MainActivity extends BaseActivity implements ITestCallback {
         mTestList.add(TestItem.SAFEKEY);
         mTestList.add(TestItem.HEART);
         mTestList.add(TestItem.WIRELESS_HEART);
-        mTestList.add(TestItem.KEYBOARD);
+        mTestList.add(TestItem.MARTIX_KEYBOARD);
+//        mTestList.add(TestItem.I2C_KEYBOARD);
         mTestList.add(TestItem.CONTROL_COMMUNICATION);
         mTestList.add(TestItem.RFID_UART);
         mTestList.add(TestItem.LEU_UART);
@@ -135,6 +133,7 @@ public class MainActivity extends BaseActivity implements ITestCallback {
         mTestList.add(TestItem.BACKLIGHT);
         mTestList.add(TestItem.TFT_COLOR);
         mTestList.add(TestItem.TOUCHSCREEN);
+        mTestList.add(TestItem.TV);
     }
 
     private void test(TestItem testItem) {
@@ -161,7 +160,8 @@ public class MainActivity extends BaseActivity implements ITestCallback {
                 heartTest.setTestCallback(this);
                 heartTest.start();
                 break;
-            case KEYBOARD:
+            case MARTIX_KEYBOARD:
+            case I2C_KEYBOARD:
                 KeyboardTest keyboardTest = new KeyboardTest(mActivity, testItem);
                 keyboardTest.setTestCallback(this);
                 keyboardTest.start();
@@ -201,6 +201,7 @@ public class MainActivity extends BaseActivity implements ITestCallback {
             case TFT_COLOR:
             case TOUCHSCREEN:
             case BACKLIGHT:
+            case TV:
                 ManualTest manualTest = new ManualTest(mActivity, testItem);
                 manualTest.setTestCallback(this);
                 manualTest.setMenuBar(mMenuBar);
@@ -217,6 +218,7 @@ public class MainActivity extends BaseActivity implements ITestCallback {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     protected void startAutoTest(StartTestEvent event) {
+        mMessagePresenter.cleanMessage();
         autoTest();
     }
 

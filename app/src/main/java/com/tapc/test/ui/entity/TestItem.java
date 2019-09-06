@@ -8,11 +8,14 @@ public enum TestItem {
     CONTROL_COMMUNICATION("下控通讯测试"),
     MCU_COMMUNICATION("与MCU通讯测试"),
 
-    KEYBOARD("按键口测试"),
+    MARTIX_KEYBOARD("矩阵按键口测试"),
+    I2C_KEYBOARD("I2C按键口测试"),
+
     EARPHONE("耳机测试"),
     SPEAKER("喇叭测试"),
     MP3_IN("MP3 测试"),
     AUDIO_IN("AUDIO IN 测试"),
+    
     TV("TV测试"),
     TF("TF卡测试"),
     USB("USB 测试"),

@@ -39,9 +39,6 @@ public class ControlCmnTest extends BaseTest {
         MachineController.getInstance().stopMachine(0);
         MachineController.getInstance().startMachine(100, 100);
         SystemClock.sleep(800);
-        if (testItem.getStatus() == TestSatus.IN_TESTING) {
-            testItem.setStatus(TestSatus.FAIL);
-        }
         activity.unregisterReceiver(mStatusReceiver);
     }
 

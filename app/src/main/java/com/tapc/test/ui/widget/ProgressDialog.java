@@ -1,6 +1,7 @@
 package com.tapc.test.ui.widget;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,9 +50,11 @@ public class ProgressDialog extends BaseSystemView {
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                hide();
-                if (mProgress.getProgress() == 100) {
-                    EventBus.getDefault().post(new GetMcuVersionEvent());
+                if (!TextUtils.isEmpty(mMessage.getText())) {
+                    dismiss();
+                    if (mProgress.getProgress() == 100) {
+                        EventBus.getDefault().post(new GetMcuVersionEvent());
+                    }
                 }
             }
         });

@@ -2,19 +2,16 @@ package com.tapc.test.model.test;
 
 import android.app.Activity;
 import android.os.SystemClock;
-import android.text.TextUtils;
 
-import com.tapc.platform.model.device.controller.MachineController;
 import com.tapc.platform.model.device.controller.uart.Commands;
 import com.tapc.test.model.base.BaseTest;
 import com.tapc.test.ui.activity.BrightnessTestActivity;
+import com.tapc.test.ui.activity.TVActivity;
 import com.tapc.test.ui.activity.TftTestActivity;
 import com.tapc.test.ui.activity.TouchTestActivity;
-import com.tapc.test.ui.base.BaseActivity;
-import com.tapc.test.ui.entity.MessageType;
 import com.tapc.test.ui.entity.TestItem;
 import com.tapc.test.ui.entity.TestSatus;
-import com.tapc.test.ui.event.BrightnessResultEvent;
+import com.tapc.test.ui.event.ManualTestFinishedEvent;
 import com.tapc.test.ui.widget.MenuBar;
 import com.tapc.test.ui.widget.TestResultDialog;
 import com.tapc.test.utils.IntentUtil;
@@ -56,6 +53,9 @@ public class ManualTest extends BaseTest {
             case TOUCHSCREEN:
                 IntentUtil.startActivity(activity, TouchTestActivity.class);
                 break;
+            case TV:
+                IntentUtil.startActivity(activity, TVActivity.class);
+                break;
             default:
                 testItem.setStatus(TestSatus.FAIL);
                 break;
@@ -63,7 +63,6 @@ public class ManualTest extends BaseTest {
         while (testItem.getStatus() == TestSatus.IN_TESTING) {
             SystemClock.sleep(200);
         }
-        stop();
         EventBus.getDefault().unregister(this);
         emitter.onNext(SHOW_MENU_BAR);
     }
@@ -96,7 +95,7 @@ public class ManualTest extends BaseTest {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    protected void testFinished(BrightnessResultEvent event) {
+    protected void testFinished(ManualTestFinishedEvent event) {
         TestResultDialog testResultDialog = new TestResultDialog(activity, testItem);
         testResultDialog.show();
     }

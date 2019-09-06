@@ -38,7 +38,6 @@ public class SafeKeyTest extends BaseTest {
         } else {
             testItem.setStatus(TestSatus.FAIL);
         }
-        stop();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.tapc.test.ui.activity.presenter.mcu;
+package com.tapc.test.ui.activity.presenter;
 
 import android.content.Context;
 import android.text.TextUtils;

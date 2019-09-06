@@ -69,7 +69,7 @@ public class MenuBar extends BaseSystemView {
                         showProgressDialog(View.VISIBLE, mProgressDialog.getProgress(), msg);
                     }
                 });
-                Config.EX_SD_FILE_PATH = "/storage/sdcard0/";
+                Config.EX_SD_FILE_PATH = "/sdcard/";
                 mcuPresenter.update(Config.EX_SD_FILE_PATH);
             }
         }).start();

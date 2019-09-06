@@ -38,9 +38,6 @@ public class UartTest extends BaseTest {
     public void testProcess(ObservableEmitter<Object> emitter) {
         uartCtl.sendStartTestCommand(commands, 0, 0);
         SystemClock.sleep(200);
-        if (testItem.getStatus() == TestSatus.IN_TESTING) {
-            testItem.setStatus(TestSatus.FAIL);
-        }
     }
 
     @Override

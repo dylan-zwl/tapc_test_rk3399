@@ -20,6 +20,8 @@ public class UartCtl {
     private boolean isOpened = false;
     private FileInputStream mFileInputStream;
     private FileOutputStream mFileOutputStream;
+    private int mUsbIndex = -1;
+    private ReadThread mReadThread;
 
     public static UartCtl getInstance() {
         if (sUartCtl == null) {
@@ -28,18 +30,39 @@ public class UartCtl {
         return sUartCtl;
     }
 
+    public void setMasterUsb() {
+        sUartCtl = null;
+        sUartCtl = this;
+    }
+
+    public void setUsbIndex(int usb) {
+        mUsbIndex = usb;
+    }
+
+    public int getUsbIndex() {
+        return mUsbIndex;
+    }
+
     private UartCtl() {
-        isOpened = open();
+//        isOpened = open(DEVICE_NAME);
+//        if (isOpened) {
+//            mReadThread = new ReadThread();
+//            mReadThread.start();
+//        }
+    }
+
+    public UartCtl(String deviceName) {
+        isOpened = open(deviceName);
         if (isOpened) {
-            ReadThread readThread = new ReadThread();
-            readThread.start();
+            mReadThread = new ReadThread();
+            mReadThread.start();
         }
     }
 
-    public boolean open() {
+    public boolean open(String deviceName) {
         try {
-            mFileInputStream = new FileInputStream(DEVICE_NAME);
-            mFileOutputStream = new FileOutputStream(DEVICE_NAME);
+            mFileInputStream = new FileInputStream(deviceName);
+            mFileOutputStream = new FileOutputStream(deviceName);
             return true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -49,6 +72,11 @@ public class UartCtl {
 
     public void close() {
         isOpened = false;
+
+        if (mReadThread != null) {
+            mReadThread.interrupt();
+        }
+        SystemClock.sleep(100);
         if (mFileInputStream != null) {
             try {
                 mFileInputStream.close();
@@ -88,7 +116,7 @@ public class UartCtl {
     //接收命令
     ReceiveDataHandler mReceiveDataHandler;
 
-    class ReadThread extends Thread {
+    public class ReadThread extends Thread {
 
         ReadThread() {
             this.setPriority(MAX_PRIORITY);
@@ -125,6 +153,7 @@ public class UartCtl {
         }
     }
 
+    //下发测试板开始测试命令
     public void sendStartTestCommand(Commands command, int data1, int data2) {
         byte[] data = new byte[3];
         data[0] = TestUMcuCmd.START;
@@ -133,12 +162,14 @@ public class UartCtl {
         sendCommand(command, data);
     }
 
+    //下发测试板清除数据命令
     public void sendClearTestCommand(Commands command) {
         byte[] data = new byte[3];
         data[0] = TestUMcuCmd.CLEAR_RES;
         sendCommand(command, data);
     }
 
+    //下发测试板停止测试命令
     public void sendStopTestCommand(Commands command) {
         byte[] data = new byte[3];
         data[0] = TestUMcuCmd.STOP;

@@ -1,18 +1,15 @@
 package com.tapc.test.ui.activity;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
 
 import com.tapc.test.R;
 import com.tapc.test.ui.base.BaseActivity;
-import com.tapc.test.ui.event.BrightnessResultEvent;
+import com.tapc.test.ui.event.ManualTestFinishedEvent;
 import com.tapc.test.ui.widget.TftColorView;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TftTestActivity extends BaseActivity {
@@ -33,7 +30,7 @@ public class TftTestActivity extends BaseActivity {
     @OnClick(R.id.tftcolor_view)
     protected void viewOnClick(View v) {
         if (mTftColorView.getIndex() >= TftColorView.CHECK_ITEM) {
-            EventBus.getDefault().post(new BrightnessResultEvent());
+            EventBus.getDefault().post(new ManualTestFinishedEvent());
             this.finish();
         }
         mTftColorView.nextTestColor();

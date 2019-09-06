@@ -19,6 +19,7 @@ import com.tapc.test.ui.entity.TestItem;
 import com.tapc.test.ui.entity.TestSatus;
 import com.tapc.test.ui.entity.TestVolumeStatus;
 import com.tapc.test.ui.entity.TestWay;
+import com.tapc.test.utils.SysUtils;
 
 import java.util.Observable;
 
@@ -26,14 +27,14 @@ import io.reactivex.ObservableEmitter;
 
 public class SoundTest extends BaseTest {
     //测试静音
-    private static int TEST_VOLUME_MUTE = 0;
+    private static final int TEST_VOLUME_MUTE = 0;
     //测试最大音
-    private static int TEST_VOLUME_MAX = 1;
+    private static final int TEST_VOLUME_MAX = 1;
 
-    private AudioManager mAudiomanage;
+    private AudioManager mAudioManager;
     //播放音乐时测得音量值范围
     private int mMinVoltage = 100;
-    private int mMaxVoltage = 1400;
+    private int mMaxVoltage = 1000;
     //设置音量为低音量，高音量状态测试
     private int mSetVolumeL = 0;
     private int mSetVolumeH = 0;
@@ -55,7 +56,6 @@ public class SoundTest extends BaseTest {
                 commands = Commands.REGISTER_AUDIO_IN_HR_AGING;
                 break;
             case SPEAKER:
-                isSpeakerOutput = true;
                 commands = Commands.REGISTER_NO_IN_HR_AGING;
                 break;
             case EARPHONE:
@@ -67,24 +67,26 @@ public class SoundTest extends BaseTest {
 
     @Override
     public void testProcess(ObservableEmitter<Object> emitter) {
-        if (mAudiomanage == null) {
-            mAudiomanage = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
+        if (mAudioManager == null) {
+            mAudioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
         }
+        initVolume();
         uartCtl.sendClearTestCommand(commands);
 
         if (testItem == TestItem.SPEAKER || testItem == TestItem.EARPHONE) {
             startMediaPlayer();
         } else {
-            startVoiceInput();
+//            startVoiceInput();
         }
-
-        SystemClock.sleep(2000);
-
+        if (testItem == TestItem.SPEAKER || testItem == TestItem.AUDIO_IN) {
+            isSpeakerOutput = true;
+        }
         if (isSpeakerOutput) {
-            setVolume(TEST_VOLUME_MUTE, TestWay.RIGHT);
+            setVolume(TestWay.RIGHT, TEST_VOLUME_MUTE);
         } else {
-            setVolume(TEST_VOLUME_MUTE, TestWay.LEFT_RIGHT);
+            setVolume(TestWay.LEFT_RIGHT, TEST_VOLUME_MUTE);
         }
+
         while (testItem.getStatus() == TestSatus.IN_TESTING) {
             SystemClock.sleep(200);
         }
@@ -92,9 +94,8 @@ public class SoundTest extends BaseTest {
         if (testItem == TestItem.SPEAKER || testItem == TestItem.EARPHONE) {
             stopMediaPlayer();
         } else {
-            stopVoiceInput();
+//            stopVoiceInput();
         }
-        stop();
     }
 
     @Override
@@ -106,22 +107,26 @@ public class SoundTest extends BaseTest {
         if (receivePacket.getCommand() == commands) {
             mTestResultData = receivePacket.getData();
             if (mTestResultData != null && mTestResultData.length > 0) {
+                byte rightResult = 0;
+                byte leftResult = 0;
+                if (mTestResultData.length >= 3) {
+                    //右声道测试状态结果
+                    rightResult = mTestResultData[1];
+                    //左声道测试状态结果
+                    leftResult = mTestResultData[2];
+                }
                 if (isSpeakerOutput) {
                     switch (mTestResultData[0]) {
                         case RecvTestResult.ATS_SUCC:
-                            if (mTestResultData[2] == TestVolumeStatus.SAG_TRG_FIN) {
-                                setVolume(TEST_VOLUME_MAX, TestWay.LEFT);
-                            } else if (mTestResultData[2] == TestVolumeStatus.SAG_FAIL) {
-                                checkVolumeData();
-                            } else if (mTestResultData[2] == TestVolumeStatus.SAG_SUCC) {
+                            if (leftResult == TestVolumeStatus.SAG_TRG_FIN) {
+                                setVolume(TestWay.LEFT, TEST_VOLUME_MAX);
+                            } else if (leftResult == TestVolumeStatus.SAG_FAIL || leftResult == TestVolumeStatus.SAG_SUCC) {
                                 checkVolumeData();
                             } else {
-                                if (mTestResultData[1] == TestVolumeStatus.SAG_TRG_FIN) {
-                                    setVolume(TEST_VOLUME_MAX, TestWay.RIGHT);
-                                } else if (mTestResultData[1] == TestVolumeStatus.SAG_FAIL) {
-                                    setVolume(TEST_VOLUME_MUTE, TestWay.LEFT);
-                                } else if (mTestResultData[1] == TestVolumeStatus.SAG_SUCC) {
-                                    setVolume(TEST_VOLUME_MUTE, TestWay.LEFT);
+                                if (rightResult == TestVolumeStatus.SAG_TRG_FIN) {
+                                    setVolume(TestWay.RIGHT, TEST_VOLUME_MAX);
+                                } else if (rightResult == TestVolumeStatus.SAG_FAIL || rightResult == TestVolumeStatus.SAG_SUCC) {
+                                    setVolume(TestWay.LEFT, TEST_VOLUME_MUTE);
                                 }
                             }
                             break;
@@ -135,14 +140,14 @@ public class SoundTest extends BaseTest {
                 } else {
                     switch (mTestResultData[0]) {
                         case RecvTestResult.ATS_SUCC:
-                            if (mTestResultData[1] == TestVolumeStatus.SAG_TRG_FIN
-                                    && mTestResultData[2] == TestVolumeStatus.SAG_TRG_FIN) {
-                                setVolume(TEST_VOLUME_MAX, TestWay.LEFT_RIGHT);
-                            } else if (mTestResultData[1] == TestVolumeStatus.SAG_FAIL
-                                    || mTestResultData[2] == TestVolumeStatus.SAG_FAIL) {
+                            if (rightResult == TestVolumeStatus.SAG_TRG_FIN
+                                    && leftResult == TestVolumeStatus.SAG_TRG_FIN) {
+                                setVolume(TestWay.LEFT_RIGHT, TEST_VOLUME_MAX);
+                            } else if (rightResult == TestVolumeStatus.SAG_FAIL
+                                    || leftResult == TestVolumeStatus.SAG_FAIL) {
                                 checkVolumeData();
-                            } else if (mTestResultData[1] == TestVolumeStatus.SAG_SUCC
-                                    && mTestResultData[2] == TestVolumeStatus.SAG_SUCC) {
+                            } else if (rightResult == TestVolumeStatus.SAG_SUCC
+                                    && leftResult == TestVolumeStatus.SAG_SUCC) {
                                 checkVolumeData();
                             }
                             break;
@@ -174,14 +179,24 @@ public class SoundTest extends BaseTest {
         int rightVolume1H =
                 (int) ((mTestResultData[7] & 0xFF) | ((mTestResultData[8] & 0xFF) << 8));
 
-        msgStr = msgStr + "通道1左声道：（" + leftVolume1L + "~" + leftVolume1H + "）mv\n";
-        msgStr = msgStr + "通道1右声道：（" + rightVolume1L + "~" + rightVolume1H + "）mv\n";
-
-        if (leftVolume1L < mMinVoltage && rightVolume1L < mMinVoltage && leftVolume1H > mMaxVoltage
-                && rightVolume1H > mMaxVoltage) {
-            VolumeResult1 = true;
+        if (isSpeakerOutput) {
+            msgStr = msgStr + "通道1左声道：（" + leftVolume1L + "~" + leftVolume1H + "）mv\n";
+            msgStr = msgStr + "通道1右声道：（" + rightVolume1L + "~" + rightVolume1H + "）mv\n";
+        } else {
+            msgStr = msgStr + "左声道：（" + leftVolume1L + "~" + leftVolume1H + "）mv\n";
+            msgStr = msgStr + "右声道：（" + rightVolume1L + "~" + rightVolume1H + "）mv\n";
         }
-
+        if (testItem == TestItem.AUDIO_IN) {
+            //audio in 右声道声音通道不通，暂时不比较
+            if (leftVolume1L < mMinVoltage && leftVolume1H > mMaxVoltage) {
+                VolumeResult1 = true;
+            }
+        } else {
+            if (leftVolume1L < mMinVoltage && rightVolume1L < mMinVoltage && leftVolume1H > mMaxVoltage
+                    && rightVolume1H > mMaxVoltage) {
+                VolumeResult1 = true;
+            }
+        }
         if (isSpeakerOutput) {
             int leftVolume2L =
                     (int) ((mTestResultData[17] & 0xFF) | ((mTestResultData[18] & 0xFF) << 8));
@@ -195,9 +210,15 @@ public class SoundTest extends BaseTest {
 
             msgStr = msgStr + "通道2左声道：（" + leftVolume2L + "~" + leftVolume2H + "）mv\n";
             msgStr = msgStr + "通道2右声道：（" + rightVolume2L + "~" + rightVolume2H + "）mv\n";
-            if (leftVolume2L < mMinVoltage && rightVolume2L < mMinVoltage && leftVolume2H > mMaxVoltage
-                    && rightVolume2H > mMaxVoltage) {
-                VolumeResult2 = true;
+            if (testItem == TestItem.AUDIO_IN) {
+                if (leftVolume2L < mMinVoltage && leftVolume2H > mMaxVoltage) {
+                    VolumeResult2 = true;
+                }
+            } else {
+                if (leftVolume2L < mMinVoltage && rightVolume2L < mMinVoltage && leftVolume2H > mMaxVoltage
+                        && rightVolume2H > mMaxVoltage) {
+                    VolumeResult2 = true;
+                }
             }
         }
         if (isSpeakerOutput) {
@@ -217,69 +238,67 @@ public class SoundTest extends BaseTest {
         return result;
     }
 
-    @Override
-    protected void init() {
-        super.init();
+    private void initVolume() {
+//        int maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         switch (testItem) {
             case AUDIO_IN:
                 mSetVolumeL = 0;
-                mSetVolumeH = 100;
+                mSetVolumeH = 8;
                 mMinVoltage = 100;
-                mMaxVoltage = 1500;
+                mMaxVoltage = 800;
                 break;
             case MP3_IN:
                 mSetVolumeL = 0;
-                mSetVolumeH = 100;
+                mSetVolumeH = 10;
                 mMinVoltage = 100;
-                mMaxVoltage = 1500;
+                mMaxVoltage = 800;
                 break;
             case SPEAKER:
                 mSetVolumeL = 0;
-                mSetVolumeH = 100;
+                mSetVolumeH = 8;
                 mMinVoltage = 100;
-                mMaxVoltage = 1500;
+                mMaxVoltage = 800;
                 break;
             case EARPHONE:
                 mSetVolumeL = 0;
-                mSetVolumeH = 100;
+                mSetVolumeH = 10;
                 mMinVoltage = 100;
-                mMaxVoltage = 1100;
+                mMaxVoltage = 600;
                 break;
             default:
                 break;
         }
     }
 
-
-    private void setVolume(int level, int flag) {
+    //testWay:左右声道，testValume:静音，放音状态
+    private void setVolume(int testWay, int testValume) {
         int volume = 0;
-        switch (level) {
-            case 0:
+        switch (testValume) {
+            case TEST_VOLUME_MUTE:
                 volume = mSetVolumeL;
                 break;
-            case 1:
+            case TEST_VOLUME_MAX:
                 volume = mSetVolumeH;
                 break;
         }
-        mAudiomanage.setStreamVolume(AudioManager.STREAM_MUSIC, volume,
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume,
                 AudioManager.FLAG_PLAY_SOUND);
-        sendStartTestCommand(level, flag);
-        Log.e("audio", " volume : " + volume + " level :" + level);
+        sendStartTestCommand(testWay, testValume);
     }
 
-    private void sendStartTestCommand(int cmd, int flag) {
+    private void sendStartTestCommand(int testWay, int testValume) {
         byte volumeR = 0x10;
         byte volumeL = 0x20;
         byte[] data = new byte[3];
         data[0] = TestUMcuCmd.START;
-        if (flag == 0) {
-            data[1] = (byte) (volumeR | volumeL | cmd);
-        } else if (flag == 1) {
-            data[1] = (byte) (volumeR | cmd);
-        } else if (flag == 2) {
-            data[1] = (byte) (volumeL | cmd);
+        if (testWay == TestWay.LEFT_RIGHT) {
+            data[1] = (byte) (volumeR | volumeL | testValume);
+        } else if (testWay == TestWay.RIGHT) {
+            data[1] = (byte) (volumeR | testValume);
+        } else if (testWay == TestWay.LEFT) {
+            data[1] = (byte) (volumeL | testValume);
         }
-        data[2] = (byte) (cmd * 25);
+        data[2] = (byte) (testValume * 25);
         uartCtl.sendCommand(commands, data);
     }
 

@@ -2,8 +2,6 @@ package com.tapc.test.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -14,12 +12,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.tapc.test.R;
 import com.tapc.test.ui.base.BaseActivity;
-import com.tapc.test.ui.event.BrightnessResultEvent;
+import com.tapc.test.ui.event.ManualTestFinishedEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class BrightnessTestActivity extends BaseActivity {
@@ -103,7 +100,7 @@ public class BrightnessTestActivity extends BaseActivity {
 
     @OnClick(R.id.bright_test_finish)
     protected void testFinish(View v) {
-        EventBus.getDefault().post(new BrightnessResultEvent());
+        EventBus.getDefault().post(new ManualTestFinishedEvent());
         this.finish();
     }
 

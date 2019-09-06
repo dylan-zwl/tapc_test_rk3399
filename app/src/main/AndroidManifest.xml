@@ -33,6 +33,8 @@
         <activity android:name=".ui.activity.BrightnessTestActivity" />
         <activity android:name=".ui.activity.TouchTestActivity" />
         <activity android:name=".ui.activity.TftTestActivity" />
+        <activity android:name=".ui.activity.TVActivity" />
+
     </application>
 
 </manifest>

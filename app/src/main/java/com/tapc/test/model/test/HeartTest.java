@@ -47,7 +47,6 @@ public class HeartTest extends BaseTest {
         } else {
             testItem.setStatus(TestSatus.FAIL);
         }
-        stop();
     }
 
     @Override
@@ -57,9 +56,16 @@ public class HeartTest extends BaseTest {
 
     private boolean testHearRate(int min, int max, int way) {
         testHeartRateOpen(way);
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 8; i++) {
             SystemClock.sleep(500);
-            mHearRate = MachineController.getInstance().getHeartRate();
+            switch (testItem) {
+                case HEART:
+                    mHearRate = MachineController.getInstance().getHeartRate() & 0xff;
+                    break;
+                case WIRELESS_HEART:
+                    mHearRate = (MachineController.getInstance().getHeartRate() & 0xff00) >> 8;
+                    break;
+            }
             if (mHearRate >= min && mHearRate <= max) {
                 mCount++;
                 if (mCount > 4) {
