@@ -32,7 +32,7 @@ public class CopyFileTest extends BaseTest {
                 mFilePath = Config.UDISK_FILE_PATH;
                 break;
             case TF:
-                mFilePath = Config.IN_SD_FILE_PATH;
+                mFilePath = Config.EX_SD_FILE_PATH;
                 break;
         }
     }

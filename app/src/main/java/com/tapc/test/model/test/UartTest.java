@@ -2,6 +2,7 @@ package com.tapc.test.model.test;
 
 import android.app.Activity;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.tapc.platform.model.device.controller.uart.Commands;
 import com.tapc.test.model.base.BaseTest;
@@ -37,7 +38,7 @@ public class UartTest extends BaseTest {
     @Override
     public void testProcess(ObservableEmitter<Object> emitter) {
         uartCtl.sendStartTestCommand(commands, 0, 0);
-        SystemClock.sleep(200);
+        SystemClock.sleep(2000);
     }
 
     @Override
@@ -47,5 +48,6 @@ public class UartTest extends BaseTest {
         } else {
             testItem.setStatus(TestSatus.FAIL);
         }
+        Log.d("#######","");
     }
 }

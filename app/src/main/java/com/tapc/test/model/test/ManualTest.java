@@ -43,23 +43,29 @@ public class ManualTest extends BaseTest {
         emitter.onNext(HIDE_MENU_BAR);
         SystemClock.sleep(500);
         EventBus.getDefault().register(this);
-        switch (testItem) {
-            case BACKLIGHT:
-                IntentUtil.startActivity(activity, BrightnessTestActivity.class);
-                break;
-            case TFT_COLOR:
-                IntentUtil.startActivity(activity, TftTestActivity.class);
-                break;
-            case TOUCHSCREEN:
-                IntentUtil.startActivity(activity, TouchTestActivity.class);
-                break;
-            case TV:
-                IntentUtil.startActivity(activity, TVActivity.class);
-                break;
-            default:
-                testItem.setStatus(TestSatus.FAIL);
-                break;
+        try {
+            switch (testItem) {
+                case BACKLIGHT:
+                    IntentUtil.startActivity(activity, BrightnessTestActivity.class);
+                    break;
+                case TFT_COLOR:
+                    IntentUtil.startActivity(activity, TftTestActivity.class);
+                    break;
+                case TOUCHSCREEN:
+                    IntentUtil.startActivity(activity, TouchTestActivity.class);
+                    break;
+                case TV:
+                    IntentUtil.startActivity(activity, TVActivity.class);
+                    break;
+                default:
+                    testItem.setStatus(TestSatus.FAIL);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            testItem.setStatus(TestSatus.FAIL);
         }
+
         while (testItem.getStatus() == TestSatus.IN_TESTING) {
             SystemClock.sleep(200);
         }

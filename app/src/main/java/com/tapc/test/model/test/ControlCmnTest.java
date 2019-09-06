@@ -38,7 +38,7 @@ public class ControlCmnTest extends BaseTest {
         //需得下发命令到下控
         MachineController.getInstance().stopMachine(0);
         MachineController.getInstance().startMachine(100, 100);
-        SystemClock.sleep(800);
+        SystemClock.sleep(2000);
         activity.unregisterReceiver(mStatusReceiver);
     }
 

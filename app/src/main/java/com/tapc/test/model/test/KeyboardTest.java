@@ -39,7 +39,7 @@ public class KeyboardTest extends BaseTest {
     @Override
     public void testProcess(ObservableEmitter<Object> emitter) {
         uartCtl.sendStartTestCommand(commands, 0, 0);
-        SystemClock.sleep(2000);
+        SystemClock.sleep(3000);
     }
 
     @Override

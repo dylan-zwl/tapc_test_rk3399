@@ -5,9 +5,12 @@
  */
 package com.tapc.test.application;
 
+import android.os.Environment;
+
 public class Config {
-    public static String IN_SD_FILE_PATH = "/storage/sdcard0/";
-    public static String EX_SD_FILE_PATH;
+    public static String IN_SD_FILE_PATH = Environment.getExternalStorageDirectory().getPath() +
+            "/";
+    public static String EX_SD_FILE_PATH = "/storage/sdcard0/";
     public static String UDISK_FILE_PATH = "/storage/usb0/";
 
     public static DeviceType DEVICE_TYPE = DeviceType.RK3399;

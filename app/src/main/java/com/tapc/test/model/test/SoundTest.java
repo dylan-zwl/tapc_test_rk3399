@@ -245,7 +245,7 @@ public class SoundTest extends BaseTest {
                 mSetVolumeL = 0;
                 mSetVolumeH = 8;
                 mMinVoltage = 100;
-                mMaxVoltage = 800;
+                mMaxVoltage = 700;
                 break;
             case MP3_IN:
                 mSetVolumeL = 0;

@@ -44,11 +44,11 @@ public class UartCtl {
     }
 
     private UartCtl() {
-//        isOpened = open(DEVICE_NAME);
-//        if (isOpened) {
-//            mReadThread = new ReadThread();
-//            mReadThread.start();
-//        }
+        isOpened = open(DEVICE_NAME);
+        if (isOpened) {
+            mReadThread = new ReadThread();
+            mReadThread.start();
+        }
     }
 
     public UartCtl(String deviceName) {
